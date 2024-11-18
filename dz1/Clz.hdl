@@ -1,0 +1,30 @@
+CHIP Clz {   //nedovršeno
+	IN in[16];
+	OUT out[16];
+	
+	//koliko je 0 do prve 1 (od početka, s lijeva nadesno)
+	
+	//koristimo Or (0 + 0 = 0, otherwise 1)
+	
+	PARTS:
+	//provjerava uzastopne 0
+	Or(a = in[0], b = in[1], out = out0);
+	Or(a = in[1], b = in[2], out = out1);
+	Or(a = in[2], b = in[3], out = out2);
+	Or(a = in[3], b = in[4], out = out3);
+	Or(a = in[4], b = in[5], out = out4);
+	Or(a = in[5], b = in[6], out = out5);
+	Or(a = in[6], b = in[7], out = out6);
+	Or(a = in[7], b = in[8], out = out7);
+	Or(a = in[8], b = in[9], out = out8);
+	Or(a = in[9], b = in[10], out = out9);
+	Or(a = in[10], b = in[11], out = out10);
+	Or(a = in[11], b = in[12], out = out11);
+	Or(a = in[12], b = in[13], out = out12);
+	Or(a = in[13], b = in[14], out = out13);
+	Or(a = in[14], b = in[15], out = out14);
+	
+	//pronaći prvu 1
+	//prebrojati 0 do nje
+
+}

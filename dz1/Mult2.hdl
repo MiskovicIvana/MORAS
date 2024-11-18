@@ -1,0 +1,12 @@
+CHIP Mult2 {
+	IN in[16];
+	OUT out[16];
+	
+	// in * 2 (cjelobrojno), zanemarimo overflow
+	//2*in = in + in
+	//koristimo CHIP Add16 implementiran na vježbama
+	
+	PARTS:
+    Add16(a = in, b = in, out = out);
+
+}

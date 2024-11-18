@@ -1,0 +1,45 @@
+//Zadatak1
+
+//pojednostavljivanje izraza
+
+//a)
+(X ^ ~Y) v (~X ^ ~Y) v (~X ^ Y) =
+~Y ^ (X v ~X) v (~X ^ Y) =          //(X v ~X) = True
+~Y v (~X ^ Y) =                     //distributivnost
+(~Y v ~X) ^ (~Y v Y) =              //(~Y v Y) = True
+~Y v ~X =                           //De Morgan
+~(Y ^ X) =
+~(X ^ Y)
+
+
+//b)
+~(~X ^ Y ^ Z) ^ ~(X ^ Y ^ ~Z) ^ (X ^ ~Y ^ Z) =           //De Morgan
+(X v ~Y v ~Z) ^ (~X v ~Y v Z) ^ (X ^ ~Y ^ Z) =           //distributivnost
+~Y ^ (X v ~Z v ~X v Z v X ^ Z) =
+~Y ^ (X v ~X v ~Z v Z v X ^ Z) =                         //X v ~X = True, ~Z v Z = True
+~Y ^ X ^ Z =
+X ^ ~Y ^ Z 
+
+
+//dokaz ekvivalencije u Coq-u
+
+Require Import Bool.
+
+Notation "! x" := (negb x) (at level 20). (*s predavanja*)
+
+(*a*)
+Goal forall x y : bool,
+  (x && !y) || (!x && !y) || (!x && y) = !(x && y).
+Proof.
+destruct x, y; reflexivity.
+Qed.
+
+
+(*b*)
+
+Goal forall x y z : bool,
+  !(!x && y && z) && !(x && y && !z) && (x && !y && z) = x && !y && z.
+Proof.
+  destruct x, y, z; reflexivity.
+Qed.
+
