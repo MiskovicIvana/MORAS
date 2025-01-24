@@ -1,0 +1,35 @@
+//Zad2 a)
+
+function min 0
+
+push argument 0
+push argument 1
+lt
+if-goto FIRST_SMALLER
+
+push argument 1
+push argument 2
+lt
+if-goto SECOND_SMALLER
+goto THIRD
+
+label FIRST_SMALLER
+push argument 0
+push argument 2
+lt
+if-goto ZERO
+
+label THIRD
+push argument 2
+goto END
+
+label ZERO
+push argument 0
+goto END
+
+label SECOND_SMALLER
+push argument 1
+goto END
+
+label END
+return
