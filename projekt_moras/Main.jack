@@ -1,0 +1,9 @@
+class Main {
+	function void main() {
+		var BalloonPop game;
+		let game = BalloonPop.new();
+		do game.gameplay();
+		do game.dispose();
+		return;
+	}
+}

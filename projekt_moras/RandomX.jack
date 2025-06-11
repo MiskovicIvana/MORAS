@@ -1,0 +1,84 @@
+/*
+generira slucajan x; y = 180, r = 30, konstante
+seed je pocetna vrijednost LCG-a (generator slucajnih brojeva)
+LCG formula: x(n+1) = (a * x(n) + c) mod m
+*/
+
+class RandomX {
+	field int seed;
+
+	constructor RandomX new (int num) {
+		let seed = num;
+		return this;
+	}
+
+
+	method int getSeed() {
+		return seed;
+	}
+
+
+	method void setSeed() {	
+		let seed = rand();
+		return;
+	}
+
+
+	method int modulo(int x, int y) {
+		var int d, r;
+		let d = x / y;
+		let r = x - (d * y);
+		return r;
+	}
+
+	
+//brojevi u 16-bitnom zapisu (gornja granica 32767), calcSeed cuva tu granicu
+
+	method void calcSeed() {
+		let seed = seed + 1;
+		if (seed = 32767) {
+			let seed = 0;	
+		}
+		return;
+	}
+
+
+//bira rand br, neogranicen, baza za randNext
+//a = 1920 izabran proizvoljno (ne prevelik ni premali)
+//odgovarao bi npr i let seed = seed + 20251;
+
+	method int rand() {
+		let seed = seed * 1920 + seed; //LCG
+		if (seed < 0) {
+			let seed = seed - 32767 - 1;
+		}
+		return seed;
+	}
+	
+
+	method int randNext(int a, int c, int m) {
+		var int val;
+		let val = (a * rand()) + c;
+		if (val < 0) {
+			let val = val - 32767 - 1;
+		}
+		let val = modulo(val, m);
+		return val;
+	}
+
+
+//x e [32, 579]
+//479 - 35 + 1 = 445 mogucih vrijednosti
+//formula: br_vrij = gornja_granica - donja_granica + 1
+//17 i 23 su proivoljno izabrani zbog LCG
+
+    	method int getRandomX() {
+        	return randNext(17, 23, 445) + 35;
+    	}
+
+
+	method void dispose() {
+		do Memory.deAlloc(this);
+		return;
+	}
+}

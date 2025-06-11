@@ -1,0 +1,165 @@
+class Balloon {
+	field RandomX x;
+    	field int y, r;
+    	field int tHeight, baseHalf;
+    	field int cy, ay;
+    	field boolean alive;
+    	field BalloonPop game;
+
+
+    	method RandomX getX() {
+        	return x;
+    	}
+
+    	method int getY() {
+        	return y;
+    	}
+
+    	method int getRadius() {
+        	return r;
+    	}
+
+    	method int getHeight() {
+        	return tHeight;
+    	}
+
+    	method int getBaseHalf() {
+        	return baseHalf;
+    	}
+
+    	method int getCy() {
+        	return cy;
+    	}
+
+    	method int getAy() {
+        	return ay;
+    	}
+
+    	method bool isAlive() {
+    		return alive;
+    	}
+
+
+    	method void setX(RandomX bx) {
+        	let x = bx;
+        	return;
+    	}
+
+    	method void setY(int by) {
+        	let y = by;
+        	return;
+    	}
+
+    	method void setR(int radius) {
+        	let r = radius;
+        	return;
+    	}
+
+    	method void setHeight(int t_height) {
+        	let tHeight = t_height;
+        	return;
+    	}
+
+    	method void setBaseHalf(int base_half) {
+        	let baseHalf = base_half;
+        	return;
+    	}
+
+    	method void setCy(int cY) {
+        	let cy = cY;
+        	return;
+    	}
+
+    	method void setAy(int aY) {
+        	let ay = aY;
+        	return;
+    	}
+
+    	method void setAlive(bool status) {
+    		let alive = status;
+    		return;
+    	}
+
+
+    	constructor Balloon new(BalloonPop gameB, RandomX xPos, int yPos, int radijus) {
+        	let game = gameB;
+		let x = xPos.getRandomX();
+        	let y = yPos;
+        	let r = radijus;
+        	let tHeight = r / 3;
+        	let baseHalf = r / 4;
+        	let cy = y + r;
+        	let ay = cy + tHeight;
+
+		let alive = true;
+
+        	do draw(true);
+        	return this;
+    	}
+
+
+    	method void draw(bool color) {
+       		do Screen.setColor(color);
+       		do Screen.drawCircle(x, y, r);
+
+       		do Screen.drawLine(x-1, y+r+1, x+1, y+r+1);
+       		do Screen.drawLine(x-2, y+r+2, x+2, y+r+2); 
+       		do Screen.drawLine(x-3, y+r+3, x+3, y+r+3); 
+       		do Screen.drawLine(x-4, y+r+4, x+4, y+r+4); 
+       		do Screen.drawLine(x-5, y+r+5, x+5, y+r+5); 
+       		do Screen.drawLine(x-6, y+r+6, x+6, y+r+6); 
+       		do Screen.drawLine(x-7, y+r+7, x+7, y+r+7); 
+       		do Screen.drawLine(x-8, y+r+8, x+8, y+r+8); 
+       		do Screen.drawLine(x-8, y+r+9, x+8, y+r+9); 
+
+       		do Screen.drawLine(x, ay, x, ay + 19); 
+       		do Screen.drawLine(x-1, ay, x-1, ay + 19); 
+       		do Screen.drawLine(x+1, ay, x+1, ay + 19); 
+	
+		return;
+	}
+
+
+	method boolean isOnTheLine() {
+    		return (((y - r) < 74) & ((y + r) > 74)) | ((y - r) = 74);
+	}
+
+
+	method boolean popped() {
+    		var int k;
+    		var String s;
+
+    		while ((y - 1 > 0) & (y - r - 1 > 0)) {
+        		let k = Keyboard.keyPressed();
+
+        		if ((isOnTheLine()) & (k = 32)) {  //space
+            			do draw(false);
+            			do Screen.setColor(false);
+           		 	do Screen.drawLine(0, 74, 511, 74); 
+            			do Screen.drawLine(0, 75, 511, 75);
+            			do Screen.setColor(true);
+            			do Screen.drawLine(0, 74, 511, 74); 
+            			do Screen.drawLine(0, 75, 511, 75);
+				
+				do setAlive(false);
+
+            			return true;
+        		}
+
+        		do draw(false);
+        		let y = y - 1;
+        		let ay = ay - 1;
+        		do draw(true);
+        		do Sys.wait(game.getSpeed());
+    		}
+
+    		return false;
+	}
+
+
+    	method void dispose() {
+        	do Memory.deAlloc(this);
+        	return;
+    	}
+
+}

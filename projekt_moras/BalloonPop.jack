@@ -1,0 +1,272 @@
+class BalloonPop {
+	field Balloon b;
+	field int score;
+	field int level;
+	field int speed;
+
+
+	method Balloon getBalloon() {
+		return b;
+	}
+
+    	method int getScore() {	
+		return score;
+	}
+
+	method int getLevel() {
+		return level;
+	}
+
+	method int getSpeed() {
+		return speed;
+	}
+
+
+	method void setSpeed() {
+    		if (level = 1) {
+        		let speed = 35;
+    		}
+		if (level = 2) {
+        		let speed = 25;
+    		}
+		if (level = 3) {
+        		let speed = 15;
+    		}
+    		return;
+	}
+
+
+	method void setScore() {
+		let score = score + level;
+		return;
+	}
+
+
+//povecava se level za svakih 8 pogodjenih balona
+	method void setLevel() {
+		var int lastScore;
+
+    		if ((bmodulo(score, 8) = 0) & (score > lastScore)) {
+        		if (level < 3) {
+            			let level = level + 1;
+        		}
+        		let lastScore = score;
+    		}
+    		return;
+	}
+
+
+	method void createBalloon() {
+    		var RandomX randx;
+    		let randx = RandomX.new(score);
+    		let b = Balloon.new(this, randx, 180, 30);
+    		return;
+	}
+
+
+    	constructor BalloonPop new() {
+		do startScreen();
+        	let score = 0;
+		let level = 1;
+		do chooseLevel();
+		do setSpeed();
+    		do createBalloon();
+        	return this;
+    	}
+
+
+    	method void startScreen() {
+		var int cnt;
+		var String s;
+
+		do Output.moveCursor(3,24);
+		let s = "BALLOON POP";
+		do Output.printString(s);
+		do s.dispose();
+
+		let cnt = 0;
+		while(cnt < 3){
+			do Output.moveCursor(cnt*2 + 7, 10);
+			let s = " Level ";
+			do Output.printString(s);
+			do s.dispose();
+			let cnt = cnt + 1;
+			do Output.printInt(cnt);
+		}
+		
+		do Output.moveCursor(16, 6);
+		let s = ">> Press ENTER to start";
+		do Output.printString(s);
+		do s.dispose();
+		
+		do Screen.setColor(true);
+		do Screen.drawRectangle(42, 78, 50, 86);
+
+//crtamo rucno dva balona zbog tipa randomX umjesto int u drawCircle
+		do Screen.setColor(true);
+       		do Screen.drawCircle(310, 110, 30);
+       		do Screen.drawLine(309, 141, 311, 141);
+       		do Screen.drawLine(308, 142, 312, 142); 
+       		do Screen.drawLine(307, 143, 313, 143); 
+       		do Screen.drawLine(306, 144, 314, 144); 
+       		do Screen.drawLine(305, 145, 315, 145); 
+       		do Screen.drawLine(304, 146, 316, 146); 
+       		do Screen.drawLine(303, 147, 317, 147); 
+       		do Screen.drawLine(302, 148, 318, 148); 
+       		do Screen.drawLine(302, 149, 318, 149); 
+       		do Screen.drawLine(310, 150, 310, 170); 
+       		do Screen.drawLine(309, 150, 309, 170); 
+       		do Screen.drawLine(311, 150, 311, 170);
+
+       		do Screen.drawCircle(400, 150, 30);
+       		do Screen.drawLine(399, 181, 401, 181);
+       		do Screen.drawLine(398, 182, 402, 182); 
+       		do Screen.drawLine(397, 183, 403, 183); 
+       		do Screen.drawLine(396, 184, 404, 184); 
+       		do Screen.drawLine(395, 185, 405, 185); 
+       		do Screen.drawLine(394, 186, 406, 186); 
+       		do Screen.drawLine(393, 187, 407, 187); 
+       		do Screen.drawLine(392, 188, 408, 188); 
+       		do Screen.drawLine(392, 189, 408, 189); 
+       		do Screen.drawLine(400, 190, 400, 210); 
+       		do Screen.drawLine(399, 190, 399, 210); 
+       		do Screen.drawLine(401, 190, 401, 210); 
+
+		return;
+	}
+
+
+	method void chooseLevel(){
+		var int key;
+
+		var boolean enter;
+		let enter = false;
+
+		while(~enter){
+			let key = Keyboard.keyPressed();
+
+			if (key = 133){  //down
+				do Screen.setColor(false);
+				do Screen.drawRectangle(42, 56 + (22 * level), 50, 64 + (22 * level));
+
+				let level = level + 1;
+				if (level = 4) {
+					let level = 1;
+				}
+				
+				do Screen.setColor(true);
+				do Screen.drawRectangle(42, 56 + (22 * level), 50, 64 + (22 * level));
+
+				do Sys.wait(250);	
+			}
+			
+			if (key = 131){  //up
+				do Screen.setColor(false);
+				do Screen.drawRectangle(42, 56 + (22 * level), 50, 64 + (22 * level));
+				
+				let level = level - 1;
+				if (level = 0) {
+					let level = 3;
+				}
+				
+				do Screen.setColor(true);
+				do Screen.drawRectangle(42, 56 + (22 * level), 50, 64 + (22 * level));
+
+				do Sys.wait(250);
+			}
+			
+			if (key = 128) {  //enter
+				do Screen.clearScreen(); 
+				let enter = true;
+				do Sys.wait(250);
+			}
+		}
+
+		do Screen.setColor(true);
+        	do Screen.drawLine(0, 240, 511, 240);
+
+       		do Screen.drawLine(0, 74, 511, 74); 
+       		do Screen.drawLine(0, 75, 511, 75);
+
+		return;
+	}
+
+
+	method void gameplay() {
+    		var int key;
+    		var boolean exit, exitq;
+    		var String s;
+    		let exit = false;
+    		let exitq = false;
+    		do showStatus();
+
+    		while (~exit) {
+        		if (b.popped()) {
+            			do setScore();
+            			do setLevel();
+            			do setSpeed();
+            			do showStatus();
+            			do createBalloon();
+        		} else {
+            			let exit = true;
+            			do Sys.wait(400);
+            			do Screen.clearScreen();
+            			do showStatus();
+
+            			do Output.moveCursor(11, 26);
+            			let s = "GAME OVER";
+            			do Output.printString(s);
+            			do s.dispose();
+
+            			do Output.moveCursor(14, 19);
+            			let s = "Press Q to quit the game";
+            			do Output.printString(s);
+            			do s.dispose();
+        		}
+
+        		do Sys.wait(speed);
+    		}
+
+    		while (~exitq) {
+        		let key = Keyboard.keyPressed();
+        		if (key = 81) {  //Q
+            			let exitq = true;
+        		}
+    		}
+    		return;
+	}
+
+
+	method void showStatus() {		
+		var String s;
+
+        	do Output.moveCursor(22, 5);
+        	let s = "LEVEL: ";
+        	do Output.printString(s);
+        	do s.dispose();
+        	do Output.printInt(level);
+
+        	do Output.moveCursor(22, 49);
+        	let s = "SCORE: ";
+        	do Output.printString(s);
+        	do s.dispose();
+        	do Output.printInt(score);
+
+        	return;
+	}
+
+
+	method int bmodulo(int x, int y) {
+		var int d, r;
+		let d = x / y;
+		let r = x - (d * y);
+		return r;
+	}
+
+
+    	method void dispose() {
+		do b.dispose();
+        	do Memory.deAlloc(this);
+        	return;
+	}
+}
